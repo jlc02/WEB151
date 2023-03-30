@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   
+    <title>Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ff4500">
+
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <link rel="manifest" href="./manifest.json">
+    <link rel="apple-touch-icon" href="/icons/icon-128.png">
+</head>
+<style>
+    td {
+        font-size: 2em;
+        padding: 10px;
+        text-align: center;
+    }
+    table {
+        width: 100%;
+        font-weight:900;
+    }
+    caption {
+        font-size: 2em;
+    }
+</style>
+<body>
+
+    <table border = 1>
+        <caption>WEB 151 Calculator</caption>
+        <tr>
+            <td style="text-align: right;" colspan=4 id=top></td>
+        </tr>
+        <tr>
+            <td style="text-align: right;" colspan=4 id=bottom></td>
+        </tr>
+        <tr>
+            <td onclick="go(7)" ;> </td>
+            <td onclick="go(8)" ;> </td>
+            <td onclick="go(9)" ;> </td>
+            <td>/</td>
+        </tr>
+        <tr>
+            <td onclick="go(7)" ;>7</td>
+            <td onclick="go(8)" ;>8</td>
+            <td onclick="go(9)" ;>9</td>
+            <td>x</td>
+        </tr>
+        <tr>
+            <td onclick="go(4)" ;>4</td>
+            <td onclick="go(5)" ;>5</td>
+            <td onclick="go(6)" ;>6</td>
+            <td onclick="sub()" ;>-</td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <td onclick="go(1)" ;>1</td>
+            <td onclick="go(2)" ;>2</td>
+            <td onclick="go(3)" ;>3</td>
+            <td onclick="add()" ;>+</td>
+        </tr>
+        <tr>
+            <td style="font-size:1.3em;" onclick="clr()" ;>clr</td>
+            <td onclick="go(0)" ;>0</td>
+            <td onclick="go('.')" ;>.</td>
+            <td onclick="equal()" ;>=</td>
+        </tr>
+    </table>
+
+    <button>Bold Text</button>
+    <p style='text-align: center'>Select Text Color</p>
+    <select id=sel>
+        <option value=black style="color:black">Black</option>
+        <option value=red style="color:red">Red</option>
+        <option value=green style="color:green">Green</option>
+        <option value=blue style="color:blue">Blue</option>
+    </select>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js').then(reg => {
+                console.log('Successfully registered');
+            }).catch(err => {
+                console.log('Error while registering SW')
+            });
+        }
+
+
+       let numberString = "";
+        window.addEventListener('load', init);
+        function add(evt){
+            numberString=numberString+"+";
+             document.getElementById('top').innerHTML = numberString;
+        }
+        function equal(evt){
+            let answer = eval(numberString);
+             document.getElementById('bottom').innerHTML = answer;
+        }
+        function sub(evt){
+            numberString=numberString+"-";
+             document.getElementById('top').innerHTML = numberString;
+        }
+        function init() { 
+            clr();
+            document.getElementsByTagName('button')[0].addEventListener('click', boldText);
+            document.getElementById('sel').addEventListener('change', changeColor);
+        }
+        //when value in dropdown changes this gets called
+        function changeColor() {
+            let newColor = document.getElementById('sel').value;
+            document.getElementsByTagName("table")[0].style.color = newColor;
+        }
+        // called by every number in the table when clicked
+        function go(number) {
+            console.log(number);
+            numberString = numberString + number;
+             document.getElementById('top').innerHTML = numberString;
+        }
+        
+        //when button is pushed bold the text
+        function boldText() {
+            document.getElementsByTagName("table")[0].style.fontWeight = '900';
+        }
+        // comes here after = is selected
+        function clr() {
+            numberString = "";
+            document.getElementById('bottom').innerHTML = "0";
+            document.getElementById('top').innerHTML = "0";
+        }
+    </script>
+
+</body></html>
